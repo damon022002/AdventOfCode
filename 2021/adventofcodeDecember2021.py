@@ -1595,3 +1595,36 @@ Day14Part2()
 def Day15Part1():
     #go through all possible paths: to get from top left to bottom right, you need to go (i-1) rows down and (j-1) columns to the right
     f = open("day15.txt")
+
+
+def Day25Part1():
+
+    with open("2021Q25.txt") as f:
+        lines = [list(line.replace("\n", "")) for line in f.readlines()]
+
+    print(lines[0])
+
+    # only when the current and the next day no sea cumcummer move, then done
+    days = 0
+    currentlines = lines.copy()
+    nextlines = lines.copy()
+    while True:
+
+        if currentlines == nextlines:
+            break
+    print(days)
+    # horizontal move to the right ">"
+    for row in nextlines:
+        length = len(row)
+
+        i = 0
+        while i < length:
+            if row[i % length] == ">" and row[(i + 1) % length] == ".":
+                row[i & length] = "."
+                row[(i + 1) % length] = ">"
+                print(nextlines[0])
+                i = i + 2
+            else:
+                i = i + 1
+        break
+    print(nextlines[0])
