@@ -1,22 +1,7 @@
 import numpy as np
-from pip._vendor import requests
 
 
-# mean = 28.25
-# elementList = [30.1, 32.7, 22.5, 27.5, 27.7, 29.8, 28.9, 31.4,
-#                31.2, 24.3, 26.4, 22.8, 29.1, 33.4, 32.5, 21.7]
-#
-#
-# def calculate(element):
-#     return (mean - element) * (mean - element)
-#
-#
-# result = 0
-# for elem in elementList:
-#     result += calculate(elem)
-#
-# print(result / 15)
-
+import copy
 
 # Day1 adventof code december PART1
 
@@ -1484,7 +1469,7 @@ def Day14Part1():
     print("Total:",total)
 
 
-Day14Part1()
+# Day14Part1()
 
 def Day14Part2():
     f = open("day14.txt")
@@ -1590,7 +1575,7 @@ def Day14Part2():
             leastcommon = pairCount
     print(mostCommon - leastcommon)
 
-Day14Part2()
+# Day14Part2()
 
 def Day15Part1():
     #go through all possible paths: to get from top left to bottom right, you need to go (i-1) rows down and (j-1) columns to the right
@@ -1598,33 +1583,112 @@ def Day15Part1():
 
 
 def Day25Part1():
-
-    with open("2021Q25.txt") as f:
-        lines = [list(line.replace("\n", "")) for line in f.readlines()]
-
-    print(lines[0])
+    lines = ""
+    with open("day25.txt") as f:
+        lines = [list(lineRow.replace("\n", "")) for lineRow in f.readlines()]
+    print(lines)
 
     # only when the current and the next day no sea cumcummer move, then done
     days = 0
-    currentlines = lines.copy()
-    nextlines = lines.copy()
-    while True:
+    lengthC = len(lines[0])
+    lengthR = len(lines)
+    done = False
 
-        if currentlines == nextlines:
-            break
+    while not done:
+        done = True
+        # horizontal move to the right ">"\
+        for row in lines:
+            i = 0
+            while i < lengthC:
+                if row[i] == ">" and row[(i + 1) % lengthC] == ".":
+                    row[i] = "."
+                    row[(i + 1) % lengthC] = ">"
+                    done = False
+                    i += 2
+                else:
+                    i += 1
+        # vertical move to down "v"
+        for iColumn in range(lengthC):
+            iRow = 0
+            while iRow < lengthR:
+                if lines[iRow][iColumn] == "v" and lines[(iRow + 1) % lengthR][iColumn] == ".":
+                    lines[iRow][iColumn] = "."
+                    lines[(iRow + 1) % lengthR][iColumn] = "v"
+                    iRow += 2
+                    done = False
+                else:
+                    iRow += 1
+
+        days += 1
+        print(lines[0])
+
     print(days)
-    # horizontal move to the right ">"
-    for row in nextlines:
-        length = len(row)
 
-        i = 0
-        while i < length:
-            if row[i % length] == ">" and row[(i + 1) % length] == ".":
-                row[i & length] = "."
-                row[(i + 1) % length] = ">"
-                print(nextlines[0])
-                i = i + 2
-            else:
-                i = i + 1
+
+def printCount(lines):
+    countEast = 0
+    countSouth = 0
+    countEmpty = 0
+    for row in lines:
+        for symbol in row:
+            if symbol == ".":
+                countEmpty += 1
+            elif symbol == ">":
+                countEast += 1
+            elif symbol == "v":
+                countSouth += 1
+
+    print("countEast", countEast)
+    print("countSouth", countSouth)
+    print("countEmpty", countEmpty)
+
+
+
+Day25Part1()
+
+from collections import defaultdict
+
+
+data = open("day25.txt").read().strip().split("\n")
+tracker = defaultdict(str)
+rows = len(data)
+cols = len(data[0])
+for r, line in enumerate(data):
+    for c, d in enumerate(line):
+        if d != ".":
+            tracker[r, c] = d
+
+steps = 0
+while True:
+    steps += 1
+    # track changes
+    east_changes = set()
+    south_changes = set()
+    east_deletes = set()
+    south_deletes = set()
+    # check east
+    for r, c in [p for p in tracker if tracker[p] == ">"]:
+        if (r, (c + 1) % cols) not in tracker:
+            east_changes.add((r, (c + 1) % cols))
+            east_deletes.add((r, c))
+    if east_changes:
+        for d in east_deletes:
+            del tracker[d]
+        for c in east_changes:
+            tracker[c] = ">"
+
+    # check south
+    for r, c in [p for p in tracker if tracker[p] == "v"]:
+        if ((r + 1) % rows, c) not in tracker:
+            south_changes.add(((r + 1) % rows, c))
+            south_deletes.add((r, c))
+    if south_changes:
+        for d in south_deletes:
+            del tracker[d]
+        for c in south_changes:
+            tracker[c] = "v"
+
+    if not east_changes and not south_changes:
         break
-    print(nextlines[0])
+
+print(f"Part 1: {steps}")
