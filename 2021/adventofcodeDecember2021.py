@@ -1812,3 +1812,57 @@ def printCount(lines):
     print("countcolumns", len(lines[0]))
 
 
+
+
+Day25Part1()
+
+def Day25Part1P2():
+    data =  open("day25.txt").read().split("\n")
+
+
+
+from collections import defaultdict
+
+data = open("day25.txt").read().strip().split("\n")
+tracker = defaultdict(str)
+rows = len(data)
+cols = len(data[0])
+for r, line in enumerate(data):
+    for c, d in enumerate(line):
+        if d != ".":
+            tracker[r, c] = d
+
+steps = 0
+while True:
+    steps += 1
+    # track changes
+    east_changes = set()
+    south_changes = set()
+    east_deletes = set()
+    south_deletes = set()
+    # check east
+    for r, c in [p for p in tracker if tracker[p] == ">"]:
+        if (r, (c + 1) % cols) not in tracker:
+            east_changes.add((r, (c + 1) % cols))
+            east_deletes.add((r, c))
+    if east_changes:
+        for d in east_deletes:
+            del tracker[d]
+        for c in east_changes:
+            tracker[c] = ">"
+
+    # check south
+    for r, c in [p for p in tracker if tracker[p] == "v"]:
+        if ((r + 1) % rows, c) not in tracker:
+            south_changes.add(((r + 1) % rows, c))
+            south_deletes.add((r, c))
+    if south_changes:
+        for d in south_deletes:
+            del tracker[d]
+        for c in south_changes:
+            tracker[c] = "v"
+
+    if not east_changes and not south_changes:
+        break
+
+print(f"Part 1: {steps}")
