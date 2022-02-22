@@ -1,7 +1,7 @@
 import numpy as np
 
-
 import copy
+
 
 # Day1 adventof code december PART1
 
@@ -1135,11 +1135,11 @@ def Day11Part1():
                 # print(f"currentrow: {currentrow}, lastrow: {lastrow}")
 
         print(f"After Day {days} with {count0} flashes:")
-        total0 +=count0
+        total0 += count0
         for row in fullgrid:
             print(row)
         days += 1
-    print(f"total flashes in {days-1} Days: {total0}")
+    print(f"total flashes in {days - 1} Days: {total0}")
 
 
 def addAroundYou(fullgrid, row, index, lastrow, lastindex):
@@ -1216,7 +1216,6 @@ def Day11Part2():
 
         print(f"After Day {days} with {count0} flashes:")
 
-
         for row in fullgrid:
             print(row)
         if count0 == 100:
@@ -1226,11 +1225,12 @@ def Day11Part2():
 
     print(f"on Day {theday}, all the octupuses flashed!")
 
+
 # Day11Part2()
 
 def Day12Part1():
     f = open("day12.txt")
-    listconnected = [] #a connected is element of [cave, [all connected to this cave] ]
+    listconnected = []  # a connected is element of [cave, [all connected to this cave] ]
     #
     for connect in f:
         caves = connect.rstrip().split("-")
@@ -1252,9 +1252,9 @@ def Day12Part1():
         if not inlist:
             listconnected.append([caves[1], [caves[0]]])
 
-    #if your second to last is a SMALL cave and your last cave was a dead end, then the path is dead!
-    #if your second to last is a BIG cave and your last cave was a dead end, then you can still go back to the big cave,
-    #but after that, not to the dead end SMALL cave
+    # if your second to last is a SMALL cave and your last cave was a dead end, then the path is dead!
+    # if your second to last is a BIG cave and your last cave was a dead end, then you can still go back to the big cave,
+    # but after that, not to the dead end SMALL cave
     #
     #     start
     #     /   \
@@ -1274,12 +1274,10 @@ def Day12Part1():
     checkpaths = [["start"]]
     availablePaths = []
     while len(checkpaths) > 0:
-        #check if deadend:
+        # check if deadend:
 
-
-        #get the connections of last visited in the forst checkpaths
+        # get the connections of last visited in the forst checkpaths
         path = checkpaths.pop(0)
-
 
     print(listconnected)
 
@@ -1305,18 +1303,18 @@ def Day13Part1():
             if dot[1] > highestY:
                 highestY = dot[1]
             # print(dot)
-            linesIndex +=1
+            linesIndex += 1
             allDots.append(dot)
         else:
             break
     print(highestX)
     print(highestY)
-    linesIndex +=1
+    linesIndex += 1
 
     print(allDots)
     while linesIndex < len(Lines):
         instructions.append(Lines[linesIndex].rstrip().split())
-        linesIndex+=1
+        linesIndex += 1
     print(instructions)
 
     instruction1 = instructions[0][2].split("=")
@@ -1330,14 +1328,13 @@ def Day13Part1():
             if dotX == foldlineX:
                 print(dotX)
             if dotX > foldlineX:
-                if nextAllDots.count([dotX- 2*(dotX-foldlineX),dot[1]]) == 0:
+                if nextAllDots.count([dotX - 2 * (dotX - foldlineX), dot[1]]) == 0:
                     nextAllDots.append([dotX - 2 * (dotX - foldlineX), dot[1]])
             elif nextAllDots.count(dot) == 0:
                 nextAllDots.append(dot)
     allDots = nextAllDots.copy()
     print(allDots)
     print(len(allDots))
-
 
 
 # Day13Part1()
@@ -1361,18 +1358,18 @@ def Day13Part2():
             if dot[1] > highestY:
                 highestY = dot[1]
             # print(dot)
-            linesIndex +=1
+            linesIndex += 1
             allDots.append(dot)
         else:
             break
     print(highestX)
     print(highestY)
-    linesIndex +=1
+    linesIndex += 1
 
     print(allDots)
     while linesIndex < len(Lines):
         instructions.append(Lines[linesIndex].rstrip().split())
-        linesIndex+=1
+        linesIndex += 1
     print(instructions)
 
     for instruction in instructions:
@@ -1385,7 +1382,7 @@ def Day13Part2():
             for dot in allDots:
                 dotX = dot[0]
                 if dotX > foldlineX:
-                    if nextAllDots.count([dotX- 2*(dotX-foldlineX),dot[1]]) == 0:
+                    if nextAllDots.count([dotX - 2 * (dotX - foldlineX), dot[1]]) == 0:
                         nextAllDots.append([dotX - 2 * (dotX - foldlineX), dot[1]])
                 elif nextAllDots.count(dot) == 0:
                     nextAllDots.append(dot)
@@ -1414,7 +1411,7 @@ def Day13Part2():
             highestY = dot[1]
     print(highestY)
     print(highestX)
-    code = [["." for y in range(highestY+1)] for x in range(highestX+1)]
+    code = [["." for y in range(highestY + 1)] for x in range(highestX + 1)]
 
     for dot in allDots:
         print(dot)
@@ -1425,6 +1422,7 @@ def Day13Part2():
         for symbol in row:
             line += symbol
         print(line)
+
 
 # Day13Part2()
 
@@ -1437,36 +1435,35 @@ def Day14Part1():
     pairs = []
     while index < len(lines):
         pairs.append(lines[index].rstrip().split(' -> '))
-        index +=1
+        index += 1
     print(polymer)
     print(pairs)
 
     steps = 1
-    while steps <=10:
+    while steps <= 10:
         tempPolymer = ""
-        for i in range(len(polymer)-1):
+        for i in range(len(polymer) - 1):
             first = polymer[i]
-            second = polymer[i+1]
+            second = polymer[i + 1]
             tempPolymer += first
-            thePair = first+second
+            thePair = first + second
             for pair in pairs:
                 if thePair == pair[0]:
                     tempPolymer += pair[1]
                     break
-        tempPolymer += polymer[len(polymer)-1]
+        tempPolymer += polymer[len(polymer) - 1]
         polymer = tempPolymer
         # print(f"After step {steps} with length {len(polymer)}: {polymer}")
-        steps +=1
-
+        steps += 1
 
     letters = set(polymer)
     countletters = []
     total = 0
     for letter in letters:
-        countletters.append([letter,polymer.count(letter)])
-        total +=polymer.count(letter)
-    print("Part1 count: ",countletters)
-    print("Total:",total)
+        countletters.append([letter, polymer.count(letter)])
+        total += polymer.count(letter)
+    print("Part1 count: ", countletters)
+    print("Total:", total)
 
 
 # Day14Part1()
@@ -1479,31 +1476,31 @@ def Day14Part2():
     pairs = []
     while index < len(lines):
         pairs.append(lines[index].rstrip().split(' -> '))
-        index +=1
+        index += 1
     print(polymer)
     print(pairs)
     polymerPairs = []
     for i in range(len(polymer) - 1):
-        pair = polymer[i]+polymer[i+1]
+        pair = polymer[i] + polymer[i + 1]
         notFound = True
         for indexPloy in range(len(polymerPairs)):
             if polymerPairs[indexPloy][0] == pair:
-                polymerPairs[indexPloy][1] +=1
+                polymerPairs[indexPloy][1] += 1
                 notFound = False
         if notFound:
-            polymerPairs.append([pair,1])
+            polymerPairs.append([pair, 1])
     print(polymerPairs)
 
     letters = set(polymer)
     newCounterLetters = []
 
     for letter in letters:
-        newCounterLetters.append([letter,polymer.count(letter)])
+        newCounterLetters.append([letter, polymer.count(letter)])
 
     print(newCounterLetters)
 
     steps = 1
-    while steps <=40:
+    while steps <= 40:
         tempPolymer = []
         for polypair in polymerPairs:
             thePair = polypair[0]
@@ -1543,26 +1540,26 @@ def Day14Part2():
                     break
         polymerPairs = tempPolymer
         # print(f"After step {steps} with length {len(polymerPairs)}: {polymerPairs}")
-        steps +=1
+        steps += 1
     # print(newCounterLetters)
-    print("FINAL polymer:",polymerPairs)
+    print("FINAL polymer:", polymerPairs)
     letters = set()
     total = 0
     for pair in polymerPairs:
         letters.add(pair[0][0])
         letters.add(pair[0][1])
     print(letters)
-    #V and F have 1 extra
+    # V and F have 1 extra
     countletters = []
 
     for letter in letters:
-        count =0
+        count = 0
         if letter == 'F':
-            count =1
+            count = 1
         for pair in polymerPairs:
             if pair[0][0] == letter:
                 count += pair[1]
-        countletters.append([letter,count])
+        countletters.append([letter, count])
     print(countletters)
 
     mostCommon = countletters[2][1]
@@ -1575,12 +1572,183 @@ def Day14Part2():
             leastcommon = pairCount
     print(mostCommon - leastcommon)
 
+
 # Day14Part2()
 
 def Day15Part1():
-    #go through all possible paths: to get from top left to bottom right, you need to go (i-1) rows down and (j-1) columns to the right
+    # go through all possible paths: to get from top left to bottom right, you need to go (i-1) rows down and (j-1) columns to the right
     f = open("day15.txt")
+    # Dynamic programming:"top-down :)
+    lines = [list(lineRow.replace("\n", "")) for lineRow in f.readlines()]
+    lines = [[int(i) for i in array] for array in lines]
+    print(lines)
+    print("len lines: ", len(lines), "and one line has: ", len(lines[0]))
+    cost = [[float('inf') for x in range(len(lines[0]))] for y in range(len(lines))]
+    print(cost)
+    print("len cost: ", len(cost), "and one line has: ", len(cost[0]))
 
+    # start dynamic is bottom right [99][99] and end is top right [0][0]
+    lastrow = len(lines) - 1
+    lastcol = len(lines[0]) - 1
+    # cost[lastrow][lastcol] = lines[lastrow][lastcol]
+    #
+    # pointerRow = lastrow
+    # pointerCol = lastcol
+    # while pointerRow != 0 and pointerCol != 0:
+    #     pointerRow -=1
+    #     pointerCol -=1
+    #     for x in range(lastrow, pointerRow,-1):
+    #         if x == lastrow:
+    #             cost[x][pointerCol] = cost[x][pointerCol+1] + lines[x][pointerCol]
+    #         else:
+    #             cost[x][pointerCol] = min(cost[x+1][pointerCol], cost[x][pointerCol+1]) + lines[x][pointerCol]
+    #
+    #     for x in range(lastcol, pointerCol,-1):
+    #         if x == lastcol:
+    #             cost[pointerRow][x] = cost[pointerRow+1][x] + lines[pointerRow][x]
+    #         else:
+    #             cost[pointerRow][x] = min(cost[pointerRow][x+1], cost[pointerRow+1][x]) + lines[pointerRow][x]
+    #
+    #     # The total risk of this path is 40(ExampleTest) (the starting position is never entered, so its risk is not counted).
+    #
+    #     var = 0 if pointerRow == 0 and pointerCol == 0 else lines[pointerRow][pointerCol]
+    #     cost[pointerRow][pointerCol] = min(cost[pointerRow+1][pointerCol], cost[pointerRow][pointerCol+1]) + var
+    #
+    # print("After calculating", cost)
+
+    # Check for every node what the fastest is, and the start is at the end top-bottom
+    cost2 = [[float('inf') for x in range(len(lines[0]))] for y in range(len(lines))]
+    cost2[lastrow][lastcol] = lines[lastrow][lastcol]
+    notDone = True
+    while notDone:
+        notDone = False
+        for row in range(lastrow + 1):
+            for col in range(lastcol + 1):
+                bestcost = cost2[row][col]
+                risk = lines[row][col]
+
+                bestcost = min(cost2[row + 1][col] + risk, bestcost) if row < lastrow else bestcost
+                bestcost = min(cost2[row - 1][col] + risk, bestcost) if row > 0 else bestcost
+                bestcost = min(cost2[row][col + 1] + risk, bestcost) if col < lastcol else bestcost
+                bestcost = min(cost2[row][col - 1] + risk, bestcost) if col > 0 else bestcost
+
+                notDone = True if bestcost != cost2[row][col] else notDone
+                cost2[row][col] = bestcost
+    # the starting point risk doesnt count so:
+    cost2[0][0] = cost2[0][0] - lines[0][0]
+    print(cost2)
+
+
+# Day15Part1()
+
+def Day15part2():
+    f = open("day15.txt")
+    # Dynamic programming:"top-down :)
+    origin = [list(lineRow.replace("\n", "")) for lineRow in f.readlines()]
+    origin = [[int(i) for i in array] for array in origin]
+    print(origin)
+    print("len lines: ", len(origin), "and one line has: ", len(origin[0]))
+
+    # the cost is now 5 bigger in the length and width
+    cost = [[float('inf') for x in range(len(origin[0]) * 5)] for y in range(len(origin) * 5)]
+    print(cost)
+    print("len cost: ", len(cost), "and one line has: ", len(cost[0]))
+    firstrowTile = list(origin)
+    lines = [[0 for x in range(len(origin[0]) * 5)] for y in range(len(origin) * 5)]
+    for rowI in range(5):
+        temp = list(firstrowTile)
+        for colI in range(5):
+            if colI != 0:
+                temp = [[element +1 if element !=9 else 1 for element in array] for array in temp]
+                if colI == 1:
+                    firstrowTile = list(temp)
+
+            for tempRow in range(len(temp)):
+                for tempCol in range(len(temp[0])):
+                    lines[100*rowI + tempRow][100*colI + tempCol] = temp[tempRow][tempCol]
+    print(lines)
+
+    lastrow = len(lines) - 1
+    lastcol = len(lines[0]) - 1
+    cost[lastrow][lastcol] = lines[lastrow][lastcol]
+
+    notDone = True
+    iterable = 0
+    while notDone:
+        notDone = False
+        for row in range(lastrow + 1):
+            for col in range(lastcol + 1):
+                bestcost = cost[row][col]
+                risk = lines[row][col]
+
+                bestcost = min(cost[row + 1][col] + risk, bestcost) if row < lastrow else bestcost
+                bestcost = min(cost[row - 1][col] + risk, bestcost) if row > 0 else bestcost
+                bestcost = min(cost[row][col + 1] + risk, bestcost) if col < lastcol else bestcost
+                bestcost = min(cost[row][col - 1] + risk, bestcost) if col > 0 else bestcost
+
+                notDone = True if bestcost != cost[row][col] else notDone
+                cost[row][col] = bestcost
+        iterable +=1
+        # if iterable % 1000 == 0:
+        print(cost)
+
+
+
+    # the starting point risk doesnt count so:
+    cost[0][0] = cost[0][0] - lines[0][0]
+    print(cost)
+    print("the minimumcost: ", cost[0][0])
+
+# Day15part2()
+import binascii
+def Day16part1():
+    f = open("day16.txt")
+    line = f.readline().replace("\n", "")
+    print(line, ": ", line[-1])
+
+    #format hexa to binary
+    intPresent = int(line,16)
+    print(intPresent)
+    print(convert("A"))
+    print(convert("D2FE28"))
+
+
+    #is already binary
+    queue = [[convert("D2FE28"), True, 1]]
+    sum = 0
+    while queue:
+        list = queue.pop(0)
+        packet = list[0]
+        numberPackets = list[1]
+        limit = list[2]
+        while limit == 0:
+            version = int(packet[0:3],2)
+            ID = int(packet[3:6],2)
+            sum += version
+            if ID != 4:
+                lengthType = int(packet[6])
+                if lengthType == 0:
+                    bitsPackets = int(packet[7:22], 2)
+                    queue.append([packet[22:], False, bitsPackets])
+
+                elif lengthType == 1:
+                    numberPackets = int(packet[7:18], 2)
+                    queue.append(packet[18:], True, numberPackets)
+            else:
+                #find the last index of the subpacket
+                startIndex = 6
+                index = 6
+                while packet[index] == "1":
+                    index +=5
+                #therefore the next index for the next subpacket is + 5
+                index += 5
+                lengthpacket = startIndex - index
+                                
+
+    print(sum)
+def convert(hexi):
+    return format(int(hexi,16),'0>2b')
+Day16part1()
 
 def Day25Part1():
     lines = ""
@@ -1643,52 +1811,53 @@ def printCount(lines):
     print("countEmpty", countEmpty)
 
 
-
-Day25Part1()
+# Day25Part1()
 
 from collections import defaultdict
 
 
-data = open("day25.txt").read().strip().split("\n")
-tracker = defaultdict(str)
-rows = len(data)
-cols = len(data[0])
-for r, line in enumerate(data):
-    for c, d in enumerate(line):
-        if d != ".":
-            tracker[r, c] = d
+def Day25part1Answer():
+    data = open("day25.txt").read().strip().split("\n")
+    tracker = defaultdict(str)
+    rows = len(data)
+    cols = len(data[0])
+    for r, line in enumerate(data):
+        for c, d in enumerate(line):
+            if d != ".":
+                tracker[r, c] = d
 
-steps = 0
-while True:
-    steps += 1
-    # track changes
-    east_changes = set()
-    south_changes = set()
-    east_deletes = set()
-    south_deletes = set()
-    # check east
-    for r, c in [p for p in tracker if tracker[p] == ">"]:
-        if (r, (c + 1) % cols) not in tracker:
-            east_changes.add((r, (c + 1) % cols))
-            east_deletes.add((r, c))
-    if east_changes:
-        for d in east_deletes:
-            del tracker[d]
-        for c in east_changes:
-            tracker[c] = ">"
+    steps = 0
+    while True:
+        steps += 1
+        # track changes
+        east_changes = set()
+        south_changes = set()
+        east_deletes = set()
+        south_deletes = set()
+        # check east
+        for r, c in [p for p in tracker if tracker[p] == ">"]:
+            if (r, (c + 1) % cols) not in tracker:
+                east_changes.add((r, (c + 1) % cols))
+                east_deletes.add((r, c))
+        if east_changes:
+            for d in east_deletes:
+                del tracker[d]
+            for c in east_changes:
+                tracker[c] = ">"
 
-    # check south
-    for r, c in [p for p in tracker if tracker[p] == "v"]:
-        if ((r + 1) % rows, c) not in tracker:
-            south_changes.add(((r + 1) % rows, c))
-            south_deletes.add((r, c))
-    if south_changes:
-        for d in south_deletes:
-            del tracker[d]
-        for c in south_changes:
-            tracker[c] = "v"
+        # check south
+        for r, c in [p for p in tracker if tracker[p] == "v"]:
+            if ((r + 1) % rows, c) not in tracker:
+                south_changes.add(((r + 1) % rows, c))
+                south_deletes.add((r, c))
+        if south_changes:
+            for d in south_deletes:
+                del tracker[d]
+            for c in south_changes:
+                tracker[c] = "v"
 
-    if not east_changes and not south_changes:
-        break
+        if not east_changes and not south_changes:
+            break
+    return steps
 
-print(f"Part 1: {steps}")
+# print(f"Part 1: ", Day25part1Answer())
