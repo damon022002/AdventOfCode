@@ -3,8 +3,6 @@ import numpy as np
 import copy
 
 
-# Day1 adventof code december PART1
-
 def Day1Part1():
     f = open("text.txt", "r")
 
@@ -1751,11 +1749,12 @@ def convert(hexi):
 Day16part1()
 
 def Day25Part1():
-    lines = ""
+
     with open("day25.txt") as f:
         lines = [list(lineRow.replace("\n", "")) for lineRow in f.readlines()]
     print(lines)
 
+    file = open("day25.txt", "r")
     # only when the current and the next day no sea cumcummer move, then done
     days = 0
     lengthC = len(lines[0])
@@ -1788,8 +1787,8 @@ def Day25Part1():
                     iRow += 1
 
         days += 1
-        print(lines[0])
-
+        # print(lines[0])
+    printCount(lines)
     print(days)
 
 
@@ -1809,5 +1808,7 @@ def printCount(lines):
     print("countEast", countEast)
     print("countSouth", countSouth)
     print("countEmpty", countEmpty)
+    print("countRows", len(lines))
+    print("countcolumns", len(lines[0]))
 
 
