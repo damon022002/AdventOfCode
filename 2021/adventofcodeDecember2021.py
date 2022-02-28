@@ -1657,13 +1657,13 @@ def Day15part2():
         temp = list(firstrowTile)
         for colI in range(5):
             if colI != 0:
-                temp = [[element +1 if element !=9 else 1 for element in array] for array in temp]
+                temp = [[element + 1 if element != 9 else 1 for element in array] for array in temp]
                 if colI == 1:
                     firstrowTile = list(temp)
 
             for tempRow in range(len(temp)):
                 for tempCol in range(len(temp[0])):
-                    lines[100*rowI + tempRow][100*colI + tempCol] = temp[tempRow][tempCol]
+                    lines[100 * rowI + tempRow][100 * colI + tempCol] = temp[tempRow][tempCol]
     print(lines)
 
     lastrow = len(lines) - 1
@@ -1686,32 +1686,32 @@ def Day15part2():
 
                 notDone = True if bestcost != cost[row][col] else notDone
                 cost[row][col] = bestcost
-        iterable +=1
+        iterable += 1
         # if iterable % 1000 == 0:
         print(cost)
-
-
 
     # the starting point risk doesnt count so:
     cost[0][0] = cost[0][0] - lines[0][0]
     print(cost)
     print("the minimumcost: ", cost[0][0])
 
+
 # Day15part2()
 import binascii
+
+
 def Day16part1():
     f = open("day16.txt")
     line = f.readline().replace("\n", "")
     print(line, ": ", line[-1])
 
-    #format hexa to binary
-    intPresent = int(line,16)
+    # format hexa to binary
+    intPresent = int(line, 16)
     print(intPresent)
     print(convert("A"))
     print(convert("D2FE28"))
 
-
-    #is already binary
+    # is already binary
     queue = [[convert("D2FE28"), True, 1]]
     sum = 0
     while queue:
@@ -1720,8 +1720,8 @@ def Day16part1():
         numberPackets = list[1]
         limit = list[2]
         while limit == 0:
-            version = int(packet[0:3],2)
-            ID = int(packet[3:6],2)
+            version = int(packet[0:3], 2)
+            ID = int(packet[3:6], 2)
             sum += version
             if ID != 4:
                 lengthType = int(packet[6])
@@ -1733,23 +1733,133 @@ def Day16part1():
                     numberPackets = int(packet[7:18], 2)
                     queue.append(packet[18:], True, numberPackets)
             else:
-                #find the last index of the subpacket
+                # find the last index of the subpacket
                 startIndex = 6
                 index = 6
                 while packet[index] == "1":
-                    index +=5
-                #therefore the next index for the next subpacket is + 5
+                    index += 5
+                # therefore the next index for the next subpacket is + 5
                 index += 5
                 lengthpacket = startIndex - index
-                                
 
     print(sum)
+
+
 def convert(hexi):
-    return format(int(hexi,16),'0>2b')
-Day16part1()
+    return format(int(hexi, 16), '0>2b')
+
+
+# Day16part1()
+
+
+def reachArea(areaX, areaY, speed):
+    # text: target area: x=32..65, y=-225..-177
+    # areaX = [32, 65]
+    # areaY = [-225, -177]
+    passedArea = False  # or you are in the area
+    initSpeed = [speed[0], speed[1]]
+    location = [0, 0]
+    topY = 0
+    while not passedArea:
+        topY = location[1] if speed[1] == 0 else topY
+        location[0] += speed[0]
+        location[1] += speed[1]
+        speed[0] = speed[0] - 1 if speed[0] > 0 else speed[0]  # speed slows down
+        speed[0] = speed[0] + 1 if speed[0] < 0 else speed[0]  # speed slows down
+        speed[1] = speed[1] - 1  # Gravity
+        passedArea = location[0] >= areaX[0] and location[0] <= areaX[1] and location[1] >= areaY[0] \
+                     and location[1] <= areaY[1]
+
+        if location[0] > areaX[1] or location[1] < areaY[0]:
+            break
+    if passedArea:
+        print("it reaches the Area! in: ", location, " and initial speed is ", initSpeed)
+        return [True, topY]
+    else:
+        # print("It didnt reach the area, it went through it!")
+        return [False]
+
+
+AreaX = [20, 30]
+AreaY = [-10, -5]
+# Speed = [7, 2]
+Speed = [6, 3]
+# Speed = [9, 0]
+# Speed = [17, -4]
+print(reachArea(AreaX, AreaY, Speed))
+
+
+def Day17part1():
+    # first check which speeds are available that will reach the area for the X and Y
+    areaX = [32, 65]
+    areaY = [-225, -177]
+    # because the areaX is positive, you can only have speeds that are positive
+    # and the speed can't be bigger than 65, otherwise you will pass the areaX!
+    # so look for speeds that contains in areaX:
+    speedsX = []
+    for i in range(1, 66, +1):
+        speedX = i
+        locationX = 0
+        inArea = False
+        while speedX > 0 and not inArea:
+            locationX += speedX
+            speedX -= 1
+            inArea = locationX >= areaX[0] and locationX <= areaX[1]
+        if inArea:
+            speedsX.append([i, speedX])
+    print(speedsX)
+
+    highestTopY = 0
+    TopSpeed = []
+    for i in range(250):
+        if i == 54:
+            print(i)
+        tempSpeed = [speedsX[0][0], i]
+        reachable = reachArea(areaX, areaY, tempSpeed)
+        if reachable[0] and highestTopY < reachable[1]:
+            highestTopY = reachable[1]
+            TopSpeed = list(tempSpeed)
+    print(highestTopY)
+    print(TopSpeed)
+
+
+Day17part1()
+
+def Day17Part2():
+    # first check which speeds are available that will reach the area for the X and Y
+    areaX = [32, 65]
+    areaY = [-225, -177]
+
+    # areaX = [20,30]
+    # areaY = [-10, -5]
+    # because the areaX is positive, you can only have speeds that are positive
+    # and the speed can't be bigger than 65, otherwise you will pass the areaX!
+    # so look for speeds that contains in areaX:
+    speedsX = []
+    for i in range(1, 66, +1):
+        speedX = i
+        locationX = 0
+        inArea = False
+        while speedX > 0 and not inArea:
+            locationX += speedX
+            speedX -= 1
+            inArea = locationX >= areaX[0] and locationX <= areaX[1]
+        if inArea:
+            speedsX.append([i, speedX])
+    print(speedsX)
+
+    #speedsX has all the available speedX values
+    distintSpeeds = 0
+    for speedX in speedsX:
+        for anyY in range(250,-251, -1):
+            speed = [speedX[0], anyY]
+            distintSpeeds = distintSpeeds + 1 if reachArea(areaX, areaY, speed)[0] else distintSpeeds
+    print(distintSpeeds)
+
+Day17Part2()
+
 
 def Day25Part1():
-
     with open("day25.txt") as f:
         lines = [list(lineRow.replace("\n", "")) for lineRow in f.readlines()]
     print(lines)
@@ -1812,57 +1922,58 @@ def printCount(lines):
     print("countcolumns", len(lines[0]))
 
 
-
-
-Day25Part1()
+# Day25Part1()
 
 def Day25Part1P2():
-    data =  open("day25.txt").read().split("\n")
-
+    data = open("day25.txt").read().split("\n")
 
 
 from collections import defaultdict
 
-data = open("day25.txt").read().strip().split("\n")
-tracker = defaultdict(str)
-rows = len(data)
-cols = len(data[0])
-for r, line in enumerate(data):
-    for c, d in enumerate(line):
-        if d != ".":
-            tracker[r, c] = d
 
-steps = 0
-while True:
-    steps += 1
-    # track changes
-    east_changes = set()
-    south_changes = set()
-    east_deletes = set()
-    south_deletes = set()
-    # check east
-    for r, c in [p for p in tracker if tracker[p] == ">"]:
-        if (r, (c + 1) % cols) not in tracker:
-            east_changes.add((r, (c + 1) % cols))
-            east_deletes.add((r, c))
-    if east_changes:
-        for d in east_deletes:
-            del tracker[d]
-        for c in east_changes:
-            tracker[c] = ">"
+def Day25Part1Answer():
+    data = open("day25.txt").read().strip().split("\n")
+    tracker = defaultdict(str)
+    rows = len(data)
+    cols = len(data[0])
+    for r, line in enumerate(data):
+        for c, d in enumerate(line):
+            if d != ".":
+                tracker[r, c] = d
 
-    # check south
-    for r, c in [p for p in tracker if tracker[p] == "v"]:
-        if ((r + 1) % rows, c) not in tracker:
-            south_changes.add(((r + 1) % rows, c))
-            south_deletes.add((r, c))
-    if south_changes:
-        for d in south_deletes:
-            del tracker[d]
-        for c in south_changes:
-            tracker[c] = "v"
+    steps = 0
+    while True:
+        steps += 1
+        # track changes
+        east_changes = set()
+        south_changes = set()
+        east_deletes = set()
+        south_deletes = set()
+        # check east
+        for r, c in [p for p in tracker if tracker[p] == ">"]:
+            if (r, (c + 1) % cols) not in tracker:
+                east_changes.add((r, (c + 1) % cols))
+                east_deletes.add((r, c))
+        if east_changes:
+            for d in east_deletes:
+                del tracker[d]
+            for c in east_changes:
+                tracker[c] = ">"
 
-    if not east_changes and not south_changes:
-        break
+        # check south
+        for r, c in [p for p in tracker if tracker[p] == "v"]:
+            if ((r + 1) % rows, c) not in tracker:
+                south_changes.add(((r + 1) % rows, c))
+                south_deletes.add((r, c))
+        if south_changes:
+            for d in south_deletes:
+                del tracker[d]
+            for c in south_changes:
+                tracker[c] = "v"
 
-print(f"Part 1: {steps}")
+        if not east_changes and not south_changes:
+            break
+
+    print(f"Part 1: {steps}")
+
+# Day25Part1Answer()
