@@ -1784,9 +1784,11 @@ AreaX = [20, 30]
 AreaY = [-10, -5]
 # Speed = [7, 2]
 Speed = [6, 3]
+
+
 # Speed = [9, 0]
 # Speed = [17, -4]
-print(reachArea(AreaX, AreaY, Speed))
+# print(reachArea(AreaX, AreaY, Speed))
 
 
 def Day17part1():
@@ -1823,7 +1825,7 @@ def Day17part1():
     print(TopSpeed)
 
 
-Day17part1()
+# Day17part1()
 
 def Day17Part2():
     # first check which speeds are available that will reach the area for the X and Y
@@ -1848,15 +1850,16 @@ def Day17Part2():
             speedsX.append([i, speedX])
     print(speedsX)
 
-    #speedsX has all the available speedX values
+    # speedsX has all the available speedX values
     distintSpeeds = 0
     for speedX in speedsX:
-        for anyY in range(250,-251, -1):
+        for anyY in range(250, -251, -1):
             speed = [speedX[0], anyY]
             distintSpeeds = distintSpeeds + 1 if reachArea(areaX, areaY, speed)[0] else distintSpeeds
     print(distintSpeeds)
 
-Day17Part2()
+
+# Day17Part2()
 
 
 def Day25Part1():
@@ -1901,6 +1904,101 @@ def Day25Part1():
     printCount(lines)
     print(days)
 
+
+def Day19Part1():
+    with open("day19.txt") as f:
+        wholeScans = []
+        text = [line.rstrip("\n") for line in f.readlines() if line !="\n"]
+    print(text)
+    print(text[0].count("---"))
+    print(text)
+    scan = []
+    for line in text:
+        if line.count("---") == 2:  # means its a new scanner
+            if scan:
+                wholeScans.append(scan)
+                scan = []
+        else:
+            try:
+                coords = [int(element) for element in line.split(",")]
+            except:
+                print(line)
+
+            coords = [int(element) for element in line.split(",")]
+
+            scan.append(coords)
+            if text[-1] == line:
+                wholeScans.append(scan)
+    print(wholeScans)
+    print("scanners:", len(wholeScans))
+
+
+# Day19Part1()
+
+def Day20Part1():
+    with open("day20.txt") as f:
+        text = [line.rstrip("\n") for line in f.readlines() if line !="\n"]
+        print("Whole Text: ",text)
+        enchantAlgo = list(text.pop(0))
+        print("enchant algo: ", enchantAlgo)
+
+        # prevMatrix = [["1" if element == "#" else "0" for element in row] for row in text]
+        prevMatrix = [[element for element in row] for row in text]
+        lenRows = len(prevMatrix)
+        lenCol = len(prevMatrix[0])
+        print("first Row: ", text[0])
+        print("Matrix",  prevMatrix)
+
+        #unilimited size??
+
+        done = False
+        iteration = 0
+        while iteration != 2:
+            iteration += 1
+            changes = []
+            for indexRow in range(lenRows):
+                for indexCol in range(lenCol):
+                    prevLight = prevMatrix[indexRow][indexCol]
+                    surroundedIndexes = [[indexRow-1, indexCol-1],  [indexRow-1, indexCol],  [indexRow-1, indexCol+1],
+                                         [indexRow,   indexCol-1],  [indexRow,   indexCol],  [indexRow,   indexCol+1],
+                                         [indexRow+1, indexCol-1],  [indexRow+1, indexCol],  [indexRow+1, indexCol+1]]
+                    # stringAround = [prevMatrix[surrIndex[0]][surrIndex[1]] for surrIndex in surroundedIndexes if
+                    #                 0 <= surrIndex[0] < lenRows and 0 <= surrIndex[1] < lenCol]
+                    stringAround = ""
+                    for surrIndex in surroundedIndexes :
+                        if 0 <= surrIndex[0] < lenRows and 0 <= surrIndex[1] < lenCol:
+                            stringAround += prevMatrix[surrIndex[0]][surrIndex[1]]
+                        # else:
+                        #     stringAround += "."
+                    binaryString = stringAround.replace("#","1").replace(".","0")
+                    decimal = int(binaryString , 2)
+                    # print("String: ", stringAround, "\tbinaryString: ",binaryString, "\tdecimal: ", decimal)
+
+                    #by the algo, check if on or off on the index with decimal:
+                    nextLight = enchantAlgo[decimal]
+
+                    #when a change happens, mark it:
+                    if prevLight != nextLight:
+                        changes.append([indexRow, indexCol, nextLight])
+
+            #Now applies if changes happened:
+            print(changes)
+            if changes:
+                for change in changes:
+                    prevMatrix[change[0]][change[1]] = change[2]
+
+
+
+
+
+
+            print("After iteration" , iteration , ": matrix", prevMatrix)
+            countHashTag = sum([row.count("#") for row in prevMatrix])
+            print(countHashTag)
+            # >> > int('11111111', 2) gives int 255
+
+
+Day20Part1()
 
 def printCount(lines):
     countEast = 0
